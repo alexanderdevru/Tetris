@@ -9,11 +9,16 @@ public class SpawnFigures : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NewFigure();
+        //NewFigure();
     }
 
     public void NewFigure()
     {
         Instantiate(figuresPrefabs[Random.Range(0, figuresPrefabs.Length)], transform.position, Quaternion.identity);
+    }
+
+    public void NewGame()
+    {
+        NewFigure();
     }
 }
