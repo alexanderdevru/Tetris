@@ -11,10 +11,68 @@ public class TetrisFigure : MonoBehaviour
     public static int width = 10;
     private static Transform[,] grid = new Transform[width, height];
 
+    public enum FigureTypes
+    {
+        LLeftForm,
+        LRightForm,
+        LineForm,
+        SquareForm,
+        TForm,
+        ZLeftForm,
+        ZRightForm
+    }
+
+    private const string lLeftForm = "L Left Form(Clone)";
+    private const string lRightForm = "L Right Form(Clone)";
+    private const string lineForm = "Line Form(Clone)";
+    private const string squareForm = "Square Form(Clone)";
+    private const string tForm = "T Form(Clone)";
+    private const string zLeftForm = "Z Left Form(Clone)";
+    private const string zRightForm = "Z Right Form(Clone)";
+
+    private FigureTypes figureType;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("figure instantiated " + gameObject.name);
+        SetFigureType();
+        GameObject.Find("GameManager").GetComponent<GameManager>().UpdateFiguresStatistic(figureType);
+    }
+
+    public FigureTypes GetFigureType()
+    {
+        return figureType;
+    }
+
+    private void SetFigureType()
+    {
+        switch (gameObject.name)
+        {
+            case lLeftForm:
+                figureType = FigureTypes.LLeftForm;
+                break;
+            case lRightForm:
+                figureType = FigureTypes.LRightForm;
+                break;
+            case lineForm:
+                figureType = FigureTypes.LineForm;
+                break;
+            case squareForm:
+                figureType = FigureTypes.SquareForm;
+                break;
+            case tForm:
+                figureType = FigureTypes.TForm;
+                break;
+            case zLeftForm:
+                figureType = FigureTypes.ZLeftForm;
+                break;
+            case zRightForm:
+                figureType = FigureTypes.ZRightForm;
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame

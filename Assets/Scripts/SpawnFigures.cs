@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpawnFigures : MonoBehaviour
 {
     public GameObject[] figuresPrefabs;
+    private GameObject figure;
+    public GameObject figuresParent;
 
     // Start is called before the first frame update
     void Start()
@@ -14,7 +16,7 @@ public class SpawnFigures : MonoBehaviour
 
     public void NewFigure()
     {
-        Instantiate(figuresPrefabs[Random.Range(0, figuresPrefabs.Length)], transform.position, Quaternion.identity);
+        figure = Instantiate(figuresPrefabs[Random.Range(0, figuresPrefabs.Length)], transform.position, Quaternion.identity, figuresParent.transform);
     }
 
     public void NewGame()
