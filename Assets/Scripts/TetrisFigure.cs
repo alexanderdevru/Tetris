@@ -10,6 +10,7 @@ public class TetrisFigure : MonoBehaviour
     public static int height = 20;
     public static int width = 10;
     private static Transform[,] grid = new Transform[width, height];
+    private GameManager gameManager;
 
     public enum FigureTypes
     {
@@ -37,7 +38,11 @@ public class TetrisFigure : MonoBehaviour
     {
         Debug.Log("figure instantiated " + gameObject.name);
         SetFigureType();
-        GameObject.Find("GameManager").GetComponent<GameManager>().UpdateFiguresStatistic(figureType);
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.UpdateFiguresStatistic(figureType);
+        gameManager.UpdateScores(true);
+        fallTime = gameManager.fallingTime;
+        Debug.Log("Fall time " + fallTime);
     }
 
     public FigureTypes GetFigureType()
@@ -109,10 +114,13 @@ public class TetrisFigure : MonoBehaviour
             if (!ValidMove())
             {
                 transform.position -= new Vector3(0, -1, 0);
-                AddToGrid();
-                CheckForLines();
-                this.enabled = false;
-                FindObjectOfType<SpawnFigures>().NewFigure();
+                if (!IsGameOver())
+                {
+                    AddToGrid();
+                    CheckForLines();
+                    this.enabled = false;
+                    FindObjectOfType<SpawnFigures>().NewFigure();
+                }
             }
             previousTime = Time.time;
         }
@@ -139,6 +147,28 @@ public class TetrisFigure : MonoBehaviour
         return true;
     }
 
+    private bool IsGameOver()
+    {
+        foreach (Transform children in transform)
+        {
+            int roundedX = Mathf.RoundToInt(children.transform.position.x);
+            int roundedY = Mathf.RoundToInt(children.transform.position.y);
+
+            Debug.Log("roundedX = " + roundedX);
+            Debug.Log("roundedY = " + roundedY);
+
+            if (roundedY >= height)
+            {
+                Debug.Log("Game Over");
+                this.enabled = false;
+                gameManager.GameOver();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void AddToGrid()
     {
         foreach (Transform children in transform)
@@ -156,6 +186,9 @@ public class TetrisFigure : MonoBehaviour
         {
             if (HasLine(i))
             {
+                Debug.Log("line complete");
+                gameManager.UpdateLinesNumber();
+                gameManager.UpdateScores(false);
                 DeleteLine(i);
                 RowDown(i);
             }

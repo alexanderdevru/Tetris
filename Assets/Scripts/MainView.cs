@@ -8,7 +8,7 @@ public class MainView : MonoBehaviour
     public GameObject ChooseLvlPanel;
     public GameObject GamePanel;
     public GameObject GameField;
-    public SpawnFigures spawnFigures;
+    public GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class MainView : MonoBehaviour
         ActivatePanel(ChooseLvlPanel, false);
         ActivatePanel(GamePanel, true);
         ActivatePanel(GameField, true);
-        spawnFigures.NewGame();
+        gameManager.NewGame(level);
     }
 
     public void ActivatePanel(GameObject panel, bool active)
